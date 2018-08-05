@@ -4,12 +4,13 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
+import com.techyourchance.mvc.screens.common.toolbar.ToolbarViewMvc;
 import com.techyourchance.mvc.screens.questiondetails.QuestionDetailsViewMvc;
 import com.techyourchance.mvc.screens.questiondetails.QuestionDetailsViewMvcImpl;
-import com.techyourchance.mvc.screens.questionslist.questionslistitem.QuestionsListItemViewMvc;
-import com.techyourchance.mvc.screens.questionslist.questionslistitem.QuestionsListItemViewMvcImpl;
 import com.techyourchance.mvc.screens.questionslist.QuestionsListViewMvc;
 import com.techyourchance.mvc.screens.questionslist.QuestionsListViewMvcImpl;
+import com.techyourchance.mvc.screens.questionslist.questionslistitem.QuestionsListItemViewMvc;
+import com.techyourchance.mvc.screens.questionslist.questionslistitem.QuestionsListItemViewMvcImpl;
 
 /**
  * This class will have the Activity's LayoutInflater passed to it (see BaseActivity)
@@ -35,5 +36,9 @@ public class ViewMvcFactory {
 
     public QuestionDetailsViewMvc getQuestionDetailsViewMvc(@Nullable ViewGroup parent) {
         return new QuestionDetailsViewMvcImpl(layoutInflater, parent);
+    }
+
+    public ToolbarViewMvc getToolbarViewMvc(@Nullable ViewGroup parent) {
+        return new ToolbarViewMvc(layoutInflater, parent);
     }
 }

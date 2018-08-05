@@ -2,6 +2,7 @@ package com.techyourchance.mvc.screens.questionslist;
 
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,8 +10,9 @@ import android.widget.ProgressBar;
 
 import com.techyourchance.mvc.R;
 import com.techyourchance.mvc.questions.Question;
-import com.techyourchance.mvc.screens.common.views.BaseObservableViewMvc;
 import com.techyourchance.mvc.screens.common.ViewMvcFactory;
+import com.techyourchance.mvc.screens.common.toolbar.ToolbarViewMvc;
+import com.techyourchance.mvc.screens.common.views.BaseObservableViewMvc;
 
 import java.util.List;
 
@@ -19,6 +21,9 @@ public class QuestionsListViewMvcImpl extends BaseObservableViewMvc<QuestionsLis
     private RecyclerView recyclerQuestions;
     private QuestionsRecylerAdapter adapter;
     private ProgressBar progressBar;
+    // nested MVC views
+    private Toolbar toolbar;
+    private ToolbarViewMvc toolbarViewMvc;
 
     public QuestionsListViewMvcImpl(LayoutInflater inflater, ViewGroup viewGroup, ViewMvcFactory viewMvcFactory) {
         setRootView(inflater.inflate(R.layout.layout_questions_list, viewGroup, false));
@@ -28,6 +33,11 @@ public class QuestionsListViewMvcImpl extends BaseObservableViewMvc<QuestionsLis
         recyclerQuestions.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter = new QuestionsRecylerAdapter(this, viewMvcFactory);
         recyclerQuestions.setAdapter(adapter);
+
+        toolbar = findViewById(R.id.include);
+        toolbarViewMvc = viewMvcFactory.getToolbarViewMvc(toolbar);
+        toolbarViewMvc.setTitle(getString(R.string.questions_list_screen_title));
+        toolbar.addView(toolbarViewMvc.getRootView());
     }
 
 
