@@ -63,4 +63,9 @@ public class QuestionsListController implements QuestionsListViewMvcImpl.Listene
         viewMvc.hideProgressBar();
         toastsHelper.showUseCaseError();
     }
+
+    @Override
+    public void onQuestionsListClicked() {
+        // this is the questions list screen - no-op
+    }
 }
