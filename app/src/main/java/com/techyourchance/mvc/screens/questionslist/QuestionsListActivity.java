@@ -4,6 +4,8 @@ import android.os.Bundle;
 
 import com.techyourchance.mvc.screens.common.controllers.BaseActivity;
 
+import retrofit2.http.HEAD;
+
 public class QuestionsListActivity extends BaseActivity {
 
     private QuestionsListController controller;

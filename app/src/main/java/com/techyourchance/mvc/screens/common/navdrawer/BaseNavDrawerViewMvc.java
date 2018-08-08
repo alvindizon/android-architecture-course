@@ -15,7 +15,7 @@ import com.techyourchance.mvc.R;
 import com.techyourchance.mvc.screens.common.views.BaseObservableViewMvc;
 
 public abstract class BaseNavDrawerViewMvc<ListenerType> extends BaseObservableViewMvc<ListenerType>
-        implements NavDrawerViewMvc{
+        implements NavDrawerViewMvc {
 
     private final DrawerLayout mDrawerLayout;
     private final FrameLayout mFrameLayout;
@@ -60,4 +60,5 @@ public abstract class BaseNavDrawerViewMvc<ListenerType> extends BaseObservableV
     public void closeDrawer() {
         mDrawerLayout.closeDrawers();
     }
+
 }
