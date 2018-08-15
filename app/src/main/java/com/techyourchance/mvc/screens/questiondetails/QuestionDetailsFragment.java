@@ -79,7 +79,7 @@ public class QuestionDetailsFragment extends BaseFragment implements
 
     @Override
     public void onUpButtonClick() {
-        screensNavigator.toQuestionsList();
+        screensNavigator.navigateUp();
     }
 
     @Override
