@@ -9,13 +9,13 @@ import android.view.ViewGroup;
 
 import com.techyourchance.mvc.R;
 import com.techyourchance.mvc.questions.Question;
+import com.techyourchance.mvc.screens.common.BaseViewMvc;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class QuestionsListViewMvcImpl implements  QuestionsListViewMvc, QuestionsRecylerAdapter.Listener {
+public class QuestionsListViewMvcImpl extends BaseViewMvc implements QuestionsListViewMvc, QuestionsRecylerAdapter.Listener {
 
-    private final View rootView;
 
     private RecyclerView recyclerQuestions;
     private QuestionsRecylerAdapter adapter;
@@ -23,7 +23,7 @@ public class QuestionsListViewMvcImpl implements  QuestionsListViewMvc, Question
     private final List<Listener> listeners = new ArrayList<>(1);
 
     public QuestionsListViewMvcImpl(LayoutInflater inflater, ViewGroup viewGroup) {
-        rootView = inflater.inflate(R.layout.layout_questions_list, viewGroup, false);
+        setRootView(inflater.inflate(R.layout.layout_questions_list, viewGroup, false));
 
         recyclerQuestions = findViewById(R.id.recycler_questions);
         recyclerQuestions.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -43,18 +43,6 @@ public class QuestionsListViewMvcImpl implements  QuestionsListViewMvc, Question
         listeners.remove(listener);
     }
 
-    private Context getContext() {
-        return getRootView().getContext();
-    }
-
-    private <T extends View> T findViewById(int id) {
-        return getRootView().findViewById(id);
-    }
-
-    @Override
-    public View getRootView() {
-        return rootView.getRootView();
-    }
 
     @Override
     public void onQuestionClicked(Question question) {
