@@ -1,10 +1,11 @@
 package com.techyourchance.mvc.screens.questionslist;
 
 import android.content.Context;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 
 import com.techyourchance.mvc.R;
 import com.techyourchance.mvc.questions.Question;
@@ -12,20 +13,22 @@ import com.techyourchance.mvc.questions.Question;
 import java.util.ArrayList;
 import java.util.List;
 
-public class QuestionsListViewMvcImpl implements QuestionsListAdapter.OnQuestionClickListener, QuestionsListViewMvc {
+public class QuestionsListViewMvcImpl implements  QuestionsListViewMvc, QuestionsRecylerAdapter.Listener {
 
     private final View rootView;
-    private ListView mLstQuestions;
-    private QuestionsListAdapter mQuestionsListAdapter;
+
+    private RecyclerView recyclerQuestions;
+    private QuestionsRecylerAdapter adapter;
 
     private final List<Listener> listeners = new ArrayList<>(1);
 
     public QuestionsListViewMvcImpl(LayoutInflater inflater, ViewGroup viewGroup) {
         rootView = inflater.inflate(R.layout.layout_questions_list, viewGroup, false);
 
-        mLstQuestions = findViewById(R.id.lst_questions);
-        mQuestionsListAdapter = new QuestionsListAdapter(getContext(), this);
-        mLstQuestions.setAdapter(mQuestionsListAdapter);
+        recyclerQuestions = findViewById(R.id.recycler_questions);
+        recyclerQuestions.setLayoutManager(new LinearLayoutManager(getContext()));
+        adapter = new QuestionsRecylerAdapter(inflater, this);
+        recyclerQuestions.setAdapter(adapter);
  
     }
 
@@ -63,8 +66,6 @@ public class QuestionsListViewMvcImpl implements QuestionsListAdapter.OnQuestion
 
     @Override
     public void bindQuestions(List<Question> questions) {
-        mQuestionsListAdapter.clear();
-        mQuestionsListAdapter.addAll(questions);
-        mQuestionsListAdapter.notifyDataSetChanged();
+        adapter.bindQuestions(questions);
     }
 }
