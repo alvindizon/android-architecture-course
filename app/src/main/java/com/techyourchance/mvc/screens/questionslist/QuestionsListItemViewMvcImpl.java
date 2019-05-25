@@ -7,18 +7,14 @@ import android.widget.TextView;
 
 import com.techyourchance.mvc.R;
 import com.techyourchance.mvc.questions.Question;
-import com.techyourchance.mvc.screens.common.BaseViewMvc;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.techyourchance.mvc.screens.common.BaseObservableViewMvc;
 
 /**
  * Actual implementation of a list view item's UI. Now the listview adapter doesn't have to know
  * about the UI of the list item
  */
-public class QuestionsListItemViewMvcImpl extends BaseViewMvc implements QuestionsListItemViewMvc {
-
-    private final List<Listener> listeners = new ArrayList<>(1);
+public class QuestionsListItemViewMvcImpl extends BaseObservableViewMvc<QuestionsListItemViewMvc.Listener>
+        implements QuestionsListItemViewMvc {
 
     private Question question;
     private TextView textTitle;
@@ -30,22 +26,13 @@ public class QuestionsListItemViewMvcImpl extends BaseViewMvc implements Questio
         getRootView().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                for(Listener listener : listeners) {
+                for(Listener listener : getListeners()) {
                     listener.onQuestionClicked(question);
                 }
             }
         });
     }
 
-    @Override
-    public void registerListener(Listener listener) {
-        listeners.add(listener);
-    }
-
-    @Override
-    public void unregisterListener(Listener listener) {
-        listeners.remove(listener);
-    }
 
     @Override
     public void bindQuestion(Question question) {

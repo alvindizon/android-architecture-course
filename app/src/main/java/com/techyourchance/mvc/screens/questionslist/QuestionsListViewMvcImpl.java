@@ -9,18 +9,18 @@ import android.view.ViewGroup;
 
 import com.techyourchance.mvc.R;
 import com.techyourchance.mvc.questions.Question;
+import com.techyourchance.mvc.screens.common.BaseObservableViewMvc;
 import com.techyourchance.mvc.screens.common.BaseViewMvc;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class QuestionsListViewMvcImpl extends BaseViewMvc implements QuestionsListViewMvc, QuestionsRecylerAdapter.Listener {
+public class QuestionsListViewMvcImpl extends BaseObservableViewMvc<QuestionsListViewMvc.Listener> implements QuestionsListViewMvc, QuestionsRecylerAdapter.Listener {
 
 
     private RecyclerView recyclerQuestions;
     private QuestionsRecylerAdapter adapter;
 
-    private final List<Listener> listeners = new ArrayList<>(1);
 
     public QuestionsListViewMvcImpl(LayoutInflater inflater, ViewGroup viewGroup) {
         setRootView(inflater.inflate(R.layout.layout_questions_list, viewGroup, false));
@@ -32,21 +32,10 @@ public class QuestionsListViewMvcImpl extends BaseViewMvc implements QuestionsLi
  
     }
 
-    // mechanism for sending feedback to this view's controller (i.e., the activity)
-    @Override
-    public void registerListener(Listener listener) {
-        listeners.add(listener);
-    }
-
-    @Override
-    public void unregisterListener(Listener listener) {
-        listeners.remove(listener);
-    }
-
 
     @Override
     public void onQuestionClicked(Question question) {
-        for(Listener listener : listeners) {
+        for(Listener listener : getListeners()) {
             listener.onQuestionClicked(question);
         }
 
