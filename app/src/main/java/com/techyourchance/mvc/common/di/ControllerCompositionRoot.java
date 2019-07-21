@@ -21,7 +21,7 @@ public class ControllerCompositionRoot {
         this.activity = activity;
     }
 
-    public StackoverflowApi provideStackOverflowApi() {
+    private StackoverflowApi provideStackOverflowApi() {
         return compositionRoot.provideStackOverflowApi();
     }
 
