@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.view.LayoutInflater;
 
 import com.techyourchance.mvc.networking.StackoverflowApi;
+import com.techyourchance.mvc.questions.FetchQuestionDetailsUseCase;
 
 /**
  * This is tied to the activity lifecycle, every object needed to instantiate MVC views
@@ -25,5 +26,9 @@ public class ControllerCompositionRoot {
 
     private LayoutInflater provideLayoutInflater() {
         return LayoutInflater.from(activity);
+    }
+
+    public FetchQuestionDetailsUseCase getFetchQuestionsDetailsUseCase() {
+        return new FetchQuestionDetailsUseCase(provideStackOverflowApi());
     }
 }

@@ -11,6 +11,7 @@ import com.techyourchance.mvc.R;
 import com.techyourchance.mvc.networking.QuestionDetailsResponseSchema;
 import com.techyourchance.mvc.networking.QuestionSchema;
 import com.techyourchance.mvc.networking.StackoverflowApi;
+import com.techyourchance.mvc.questions.FetchQuestionDetailsUseCase;
 import com.techyourchance.mvc.questions.QuestionDetails;
 import com.techyourchance.mvc.screens.common.BaseActivity;
 
@@ -18,12 +19,12 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class QuestionDetailsActivity extends BaseActivity {
+public class QuestionDetailsActivity extends BaseActivity implements FetchQuestionDetailsUseCase.Listener {
 
     public static final String EXTRA_QUESTION_ID = "EXTRA_QUESTION_ID";
 
-    private StackoverflowApi stackoverflowApi;
     private QuestionDetailsViewMvc viewMvc;
+    private FetchQuestionDetailsUseCase useCase;
 
     public static void start(Context context, String questionId) {
         Intent intent = new Intent(context, QuestionDetailsActivity.class);
@@ -34,43 +35,32 @@ public class QuestionDetailsActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        useCase = getCompositionRoot().getFetchQuestionsDetailsUseCase();
         viewMvc = new QuestionDetailsViewMvcImpl(LayoutInflater.from(this), null);
-        stackoverflowApi = getCompositionRoot().provideStackOverflowApi();
         setContentView(viewMvc.getRootView());
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        fetchQuestionDetails(getIntent().getStringExtra(EXTRA_QUESTION_ID));
+        useCase.registerListener(this);
+        useCase.fetchQuestionDetailsAndNotify(getIntent().getStringExtra(EXTRA_QUESTION_ID));
     }
 
-    private void fetchQuestionDetails(String stringExtra) {
-        stackoverflowApi.fetchQuestionDetails(stringExtra)
-                .enqueue(new Callback<QuestionDetailsResponseSchema>() {
-                    @Override
-                    public void onResponse(Call<QuestionDetailsResponseSchema> call, Response<QuestionDetailsResponseSchema> response) {
-                        if(response.isSuccessful()) {
-                            bindQuestion(response.body().getQuestion());
-                        } else {
-                            networkCallFailed();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<QuestionDetailsResponseSchema> call, Throwable t) {
-                        networkCallFailed();
-                    }
-                });
+    @Override
+    protected void onStop() {
+        super.onStop();
+        useCase.unregisterListener(this);
     }
 
-    private void bindQuestion(QuestionSchema question) {
-        QuestionDetails questionDetails = new QuestionDetails(question.getId(),
-                question.getTitle(), question.getBody());
+
+    @Override
+    public void onQuestionDetailsFetched(QuestionDetails questionDetails) {
         viewMvc.bindQuestionDetails(questionDetails);
     }
 
-    private void networkCallFailed() {
+    @Override
+    public void onQuestionDetailsFetchFailed() {
         Toast.makeText(this, R.string.error_network_call_failed, Toast.LENGTH_SHORT).show();
     }
 }
