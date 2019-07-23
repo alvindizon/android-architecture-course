@@ -1,12 +1,16 @@
 package com.techyourchance.mvc.common.di;
 
 import android.app.Activity;
+import android.content.Context;
 import android.view.LayoutInflater;
 
 import com.techyourchance.mvc.networking.StackoverflowApi;
 import com.techyourchance.mvc.questions.FetchQuestionDetailsUseCase;
 import com.techyourchance.mvc.questions.FetchQuestionListUseCase;
+import com.techyourchance.mvc.screens.common.MessagesDisplayer;
+import com.techyourchance.mvc.screens.common.ScreensNavigator;
 import com.techyourchance.mvc.screens.common.ViewMvcFactory;
+import com.techyourchance.mvc.screens.questionslist.QuestionsListController;
 
 /**
  * This is tied to the activity lifecycle, every object needed to instantiate MVC views
@@ -22,12 +26,16 @@ public class ControllerCompositionRoot {
         this.activity = activity;
     }
 
+    private Context provideContext() {
+        return activity;
+    }
+
     private StackoverflowApi provideStackOverflowApi() {
         return compositionRoot.provideStackOverflowApi();
     }
 
     private LayoutInflater provideLayoutInflater() {
-        return LayoutInflater.from(activity);
+        return LayoutInflater.from(provideContext());
     }
 
     public FetchQuestionDetailsUseCase getFetchQuestionsDetailsUseCase() {
@@ -37,7 +45,25 @@ public class ControllerCompositionRoot {
     public FetchQuestionListUseCase getFetchQuestionListUseCase() {
         return new FetchQuestionListUseCase(provideStackOverflowApi());
     }
+
     public ViewMvcFactory getViewMvcFactory() {
         return new ViewMvcFactory(provideLayoutInflater());
     }
+
+    public MessagesDisplayer provideMessagesDisplayer() {
+        return new MessagesDisplayer(provideContext());
+    }
+
+    public ScreensNavigator provideScreensNavigator() {
+        return new ScreensNavigator(provideContext());
+    }
+
+    public QuestionsListController getQuestionsListController() {
+        return new QuestionsListController(
+                getFetchQuestionListUseCase(),
+                provideScreensNavigator(),
+                provideMessagesDisplayer());
+    }
+
+
 }

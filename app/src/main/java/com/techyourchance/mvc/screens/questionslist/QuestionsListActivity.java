@@ -21,50 +21,28 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-// TODO extract networking code to usecase
-public class QuestionsListActivity extends BaseActivity implements QuestionsListViewMvcImpl.Listener,
-    FetchQuestionListUseCase.Listener{
+public class QuestionsListActivity extends BaseActivity {
 
-    private QuestionsListViewMvc viewMvc;
-    private FetchQuestionListUseCase useCase;
+    private QuestionsListController controller;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        useCase = getCompositionRoot().getFetchQuestionListUseCase();
-        viewMvc = getCompositionRoot().getViewMvcFactory().getQuestionsListViewMvc(null);
-        viewMvc.registerListener(this);
+        QuestionsListViewMvc viewMvc = getCompositionRoot().getViewMvcFactory().getQuestionsListViewMvc(null);
+        controller = getCompositionRoot().getQuestionsListController();
+        controller.bindView(viewMvc);
         setContentView(viewMvc.getRootView());
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        viewMvc.showProgressBar();
-        useCase.registerListener(this);
-        useCase.fetchQuestions();
+        controller.onStart();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        useCase.unregisterListener(this);
-    }
-
-    @Override
-    public void onQuestionClicked(Question question) {
-        QuestionDetailsActivity.start(this, question.getId());
-    }
-
-    @Override
-    public void onFetchQuestionListFetched(List<Question> questions) {
-        viewMvc.hideProgressBar();
-        viewMvc.bindQuestions(questions);
-    }
-
-    @Override
-    public void onFetchQuestionListFailed() {
-        viewMvc.hideProgressBar();
-        Toast.makeText(this, R.string.error_network_call_failed, Toast.LENGTH_SHORT).show();
+        controller.onStop();
     }
 }

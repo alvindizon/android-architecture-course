@@ -14,6 +14,7 @@ import com.techyourchance.mvc.networking.StackoverflowApi;
 import com.techyourchance.mvc.questions.FetchQuestionDetailsUseCase;
 import com.techyourchance.mvc.questions.QuestionDetails;
 import com.techyourchance.mvc.screens.common.BaseActivity;
+import com.techyourchance.mvc.screens.common.MessagesDisplayer;
 import com.techyourchance.mvc.screens.common.ViewMvcFactory;
 
 import retrofit2.Call;
@@ -26,6 +27,7 @@ public class QuestionDetailsActivity extends BaseActivity implements FetchQuesti
 
     private QuestionDetailsViewMvc viewMvc;
     private FetchQuestionDetailsUseCase useCase;
+    private MessagesDisplayer messagesDisplayer;
 
     public static void start(Context context, String questionId) {
         Intent intent = new Intent(context, QuestionDetailsActivity.class);
@@ -38,6 +40,7 @@ public class QuestionDetailsActivity extends BaseActivity implements FetchQuesti
         super.onCreate(savedInstanceState);
         useCase = getCompositionRoot().getFetchQuestionsDetailsUseCase();
         viewMvc = getCompositionRoot().getViewMvcFactory().getQuestionDetailsViewMvc(null);
+        messagesDisplayer = getCompositionRoot().provideMessagesDisplayer();
         setContentView(viewMvc.getRootView());
     }
 
@@ -65,6 +68,6 @@ public class QuestionDetailsActivity extends BaseActivity implements FetchQuesti
     @Override
     public void onQuestionDetailsFetchFailed() {
         viewMvc.hideProgressBar();
-        Toast.makeText(this, R.string.error_network_call_failed, Toast.LENGTH_SHORT).show();
+        messagesDisplayer.showUseCaseError();
     }
 }
