@@ -40,6 +40,7 @@ public class QuestionsListActivity extends BaseActivity implements QuestionsList
     @Override
     protected void onStart() {
         super.onStart();
+        viewMvc.showProgressBar();
         useCase.registerListener(this);
         useCase.fetchQuestions();
     }
@@ -57,11 +58,13 @@ public class QuestionsListActivity extends BaseActivity implements QuestionsList
 
     @Override
     public void onFetchQuestionListFetched(List<Question> questions) {
+        viewMvc.hideProgressBar();
         viewMvc.bindQuestions(questions);
     }
 
     @Override
     public void onFetchQuestionListFailed() {
+        viewMvc.hideProgressBar();
         Toast.makeText(this, R.string.error_network_call_failed, Toast.LENGTH_SHORT).show();
     }
 }
