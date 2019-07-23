@@ -25,7 +25,6 @@ import retrofit2.Response;
 public class QuestionsListActivity extends BaseActivity implements QuestionsListViewMvcImpl.Listener,
     FetchQuestionListUseCase.Listener{
 
-
     private QuestionsListViewMvc viewMvc;
     private FetchQuestionListUseCase useCase;
 
@@ -33,7 +32,7 @@ public class QuestionsListActivity extends BaseActivity implements QuestionsList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         useCase = getCompositionRoot().getFetchQuestionListUseCase();
-        viewMvc = new QuestionsListViewMvcImpl(LayoutInflater.from(this), null);
+        viewMvc = getCompositionRoot().getViewMvcFactory().getQuestionsListViewMvc(null);
         viewMvc.registerListener(this);
         setContentView(viewMvc.getRootView());
     }
