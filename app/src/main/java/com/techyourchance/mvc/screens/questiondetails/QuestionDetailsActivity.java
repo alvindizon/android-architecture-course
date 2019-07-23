@@ -14,6 +14,7 @@ import com.techyourchance.mvc.networking.StackoverflowApi;
 import com.techyourchance.mvc.questions.FetchQuestionDetailsUseCase;
 import com.techyourchance.mvc.questions.QuestionDetails;
 import com.techyourchance.mvc.screens.common.BaseActivity;
+import com.techyourchance.mvc.screens.common.ViewMvcFactory;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -36,13 +37,14 @@ public class QuestionDetailsActivity extends BaseActivity implements FetchQuesti
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         useCase = getCompositionRoot().getFetchQuestionsDetailsUseCase();
-        viewMvc = new QuestionDetailsViewMvcImpl(LayoutInflater.from(this), null);
+        viewMvc = getCompositionRoot().getViewMvcFactory().getQuestionDetailsViewMvc(null);
         setContentView(viewMvc.getRootView());
     }
 
     @Override
     protected void onStart() {
         super.onStart();
+        viewMvc.showProgressBar();
         useCase.registerListener(this);
         useCase.fetchQuestionDetailsAndNotify(getIntent().getStringExtra(EXTRA_QUESTION_ID));
     }
@@ -56,11 +58,13 @@ public class QuestionDetailsActivity extends BaseActivity implements FetchQuesti
 
     @Override
     public void onQuestionDetailsFetched(QuestionDetails questionDetails) {
+        viewMvc.hideProgressBar();
         viewMvc.bindQuestionDetails(questionDetails);
     }
 
     @Override
     public void onQuestionDetailsFetchFailed() {
+        viewMvc.hideProgressBar();
         Toast.makeText(this, R.string.error_network_call_failed, Toast.LENGTH_SHORT).show();
     }
 }
