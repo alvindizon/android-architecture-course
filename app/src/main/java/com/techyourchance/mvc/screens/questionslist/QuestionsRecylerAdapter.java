@@ -2,10 +2,10 @@ package com.techyourchance.mvc.screens.questionslist;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import com.techyourchance.mvc.questions.Question;
+import com.techyourchance.mvc.screens.common.ViewMvcFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,14 +26,14 @@ public class QuestionsRecylerAdapter extends RecyclerView.Adapter<QuestionsRecyl
         }
     }
 
-    private final LayoutInflater inflater;
     private final Listener listener;
+    private ViewMvcFactory viewMvcFactory;
 
     private List<Question> questions = new ArrayList<>();
 
-    public QuestionsRecylerAdapter(LayoutInflater inflater, Listener listener) {
-        this.inflater = inflater;
+    public QuestionsRecylerAdapter(Listener listener, ViewMvcFactory viewMvcFactory) {
         this.listener = listener;
+        this.viewMvcFactory = viewMvcFactory;
     }
 
     public void bindQuestions(List<Question> questions) {
@@ -44,7 +44,7 @@ public class QuestionsRecylerAdapter extends RecyclerView.Adapter<QuestionsRecyl
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        QuestionsListItemViewMvc viewMvc = new QuestionsListItemViewMvcImpl(inflater, parent);
+        QuestionsListItemViewMvc viewMvc = viewMvcFactory.getQuestionsListItemViewMvc(parent);
         viewMvc.registerListener(this);
         return new MyViewHolder(viewMvc);
     }
