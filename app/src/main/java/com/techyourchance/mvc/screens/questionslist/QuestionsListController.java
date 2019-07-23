@@ -34,12 +34,16 @@ public class QuestionsListController implements QuestionsListViewMvcImpl.Listene
     }
 
     public void onStart() {
+        viewMvc.registerListener(this);
         viewMvc.showProgressBar();
         useCase.registerListener(this);
         useCase.fetchQuestions();
     }
 
     public void onStop() {
+        // make sure that any updates originating from this screen is stopped and does not reach
+        // the next screen
+        viewMvc.unregisterListener(this);
         useCase.unregisterListener(this);
     }
 
