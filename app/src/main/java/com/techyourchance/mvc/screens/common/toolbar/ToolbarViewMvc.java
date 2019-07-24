@@ -1,6 +1,7 @@
 package com.techyourchance.mvc.screens.common.toolbar;
 
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -21,5 +22,17 @@ public class ToolbarViewMvc extends BaseViewMvc {
 
     public void setTitle(String title) {
         mTxtTitle.setText(title);
+    }
+
+    public void setButtonListener(ImageButton.OnClickListener listener) {
+        mBtnBack.setOnClickListener(listener);
+    }
+
+    public void setButtonVisible(boolean isVisible) {
+        if(isVisible) {
+            mBtnBack.setVisibility(View.VISIBLE);
+        } else {
+            mBtnBack.setVisibility(View.GONE);
+        }
     }
 }

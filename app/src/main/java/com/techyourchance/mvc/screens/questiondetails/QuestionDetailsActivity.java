@@ -10,7 +10,7 @@ import com.techyourchance.mvc.questions.QuestionDetails;
 import com.techyourchance.mvc.screens.common.controllers.BaseActivity;
 import com.techyourchance.mvc.screens.common.toastshelper.ToastsHelper;
 
-public class QuestionDetailsActivity extends BaseActivity implements FetchQuestionDetailsUseCase.Listener {
+public class QuestionDetailsActivity extends BaseActivity implements FetchQuestionDetailsUseCase.Listener, QuestionDetailsViewMvc.Listener {
 
     public static final String EXTRA_QUESTION_ID = "EXTRA_QUESTION_ID";
 
@@ -37,6 +37,7 @@ public class QuestionDetailsActivity extends BaseActivity implements FetchQuesti
     protected void onStart() {
         super.onStart();
         viewMvc.showProgressBar();
+        viewMvc.registerListener(this);
         useCase.registerListener(this);
         useCase.fetchQuestionDetailsAndNotify(getIntent().getStringExtra(EXTRA_QUESTION_ID));
     }
@@ -44,6 +45,7 @@ public class QuestionDetailsActivity extends BaseActivity implements FetchQuesti
     @Override
     protected void onStop() {
         super.onStop();
+        viewMvc.unregisterListener(this);
         useCase.unregisterListener(this);
     }
 
@@ -58,5 +60,11 @@ public class QuestionDetailsActivity extends BaseActivity implements FetchQuesti
     public void onQuestionDetailsFetchFailed() {
         viewMvc.hideProgressBar();
         toastsHelper.showUseCaseError();
+    }
+
+
+    @Override
+    public void onUpButtonClick() {
+        onBackPressed();
     }
 }
