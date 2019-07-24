@@ -56,11 +56,13 @@ public class QuestionsListViewMvcImpl extends BaseObservableViewMvc<QuestionsLis
 
     @Override
     public void showProgressBar() {
+        recyclerQuestions.setVisibility(View.GONE);
         progressBar.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void hideProgressBar() {
         progressBar.setVisibility(View.GONE);
+        recyclerQuestions.setVisibility(View.VISIBLE);
     }
 }
