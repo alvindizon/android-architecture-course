@@ -7,8 +7,8 @@ import android.view.LayoutInflater;
 import com.techyourchance.mvc.networking.StackoverflowApi;
 import com.techyourchance.mvc.questions.FetchQuestionDetailsUseCase;
 import com.techyourchance.mvc.questions.FetchQuestionListUseCase;
-import com.techyourchance.mvc.screens.common.MessagesDisplayer;
-import com.techyourchance.mvc.screens.common.ScreensNavigator;
+import com.techyourchance.mvc.screens.common.toastshelper.ToastsHelper;
+import com.techyourchance.mvc.screens.common.screensnavigator.ScreensNavigator;
 import com.techyourchance.mvc.screens.common.ViewMvcFactory;
 import com.techyourchance.mvc.screens.questionslist.QuestionsListController;
 
@@ -50,8 +50,8 @@ public class ControllerCompositionRoot {
         return new ViewMvcFactory(provideLayoutInflater());
     }
 
-    public MessagesDisplayer provideMessagesDisplayer() {
-        return new MessagesDisplayer(provideContext());
+    public ToastsHelper provideMessagesDisplayer() {
+        return new ToastsHelper(provideContext());
     }
 
     public ScreensNavigator provideScreensNavigator() {

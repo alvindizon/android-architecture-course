@@ -1,5 +1,8 @@
 package com.techyourchance.mvc.networking;
 
+import com.techyourchance.mvc.networking.questions.QuestionDetailsResponseSchema;
+import com.techyourchance.mvc.networking.questions.QuestionsListResponseSchema;
+
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Path;

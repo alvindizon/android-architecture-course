@@ -4,22 +4,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.view.LayoutInflater;
-import android.widget.Toast;
 
-import com.techyourchance.mvc.R;
-import com.techyourchance.mvc.networking.QuestionDetailsResponseSchema;
-import com.techyourchance.mvc.networking.QuestionSchema;
-import com.techyourchance.mvc.networking.StackoverflowApi;
 import com.techyourchance.mvc.questions.FetchQuestionDetailsUseCase;
 import com.techyourchance.mvc.questions.QuestionDetails;
-import com.techyourchance.mvc.screens.common.BaseActivity;
-import com.techyourchance.mvc.screens.common.MessagesDisplayer;
-import com.techyourchance.mvc.screens.common.ViewMvcFactory;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import com.techyourchance.mvc.screens.common.controllers.BaseActivity;
+import com.techyourchance.mvc.screens.common.toastshelper.ToastsHelper;
 
 public class QuestionDetailsActivity extends BaseActivity implements FetchQuestionDetailsUseCase.Listener {
 
@@ -27,7 +16,7 @@ public class QuestionDetailsActivity extends BaseActivity implements FetchQuesti
 
     private QuestionDetailsViewMvc viewMvc;
     private FetchQuestionDetailsUseCase useCase;
-    private MessagesDisplayer messagesDisplayer;
+    private ToastsHelper toastsHelper;
 
     public static void start(Context context, String questionId) {
         Intent intent = new Intent(context, QuestionDetailsActivity.class);
@@ -40,7 +29,7 @@ public class QuestionDetailsActivity extends BaseActivity implements FetchQuesti
         super.onCreate(savedInstanceState);
         useCase = getCompositionRoot().getFetchQuestionsDetailsUseCase();
         viewMvc = getCompositionRoot().getViewMvcFactory().getQuestionDetailsViewMvc(null);
-        messagesDisplayer = getCompositionRoot().provideMessagesDisplayer();
+        toastsHelper = getCompositionRoot().provideMessagesDisplayer();
         setContentView(viewMvc.getRootView());
     }
 
@@ -68,6 +57,6 @@ public class QuestionDetailsActivity extends BaseActivity implements FetchQuesti
     @Override
     public void onQuestionDetailsFetchFailed() {
         viewMvc.hideProgressBar();
-        messagesDisplayer.showUseCaseError();
+        toastsHelper.showUseCaseError();
     }
 }

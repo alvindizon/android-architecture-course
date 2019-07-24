@@ -1,4 +1,4 @@
-package com.techyourchance.mvc.screens.questionslist;
+package com.techyourchance.mvc.screens.questionslist.questionslistitem;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,7 +7,7 @@ import android.widget.TextView;
 
 import com.techyourchance.mvc.R;
 import com.techyourchance.mvc.questions.Question;
-import com.techyourchance.mvc.screens.common.BaseObservableViewMvc;
+import com.techyourchance.mvc.screens.common.views.BaseObservableViewMvc;
 
 /**
  * Actual implementation of a list view item's UI. Now the listview adapter doesn't have to know

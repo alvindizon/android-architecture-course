@@ -1,4 +1,4 @@
-package com.techyourchance;
+package com.techyourchance.mvc.common;
 
 import android.app.Application;
 

@@ -2,8 +2,8 @@ package com.techyourchance.mvc.screens.questionslist;
 
 import com.techyourchance.mvc.questions.FetchQuestionListUseCase;
 import com.techyourchance.mvc.questions.Question;
-import com.techyourchance.mvc.screens.common.ScreensNavigator;
-import com.techyourchance.mvc.screens.common.MessagesDisplayer;
+import com.techyourchance.mvc.screens.common.screensnavigator.ScreensNavigator;
+import com.techyourchance.mvc.screens.common.toastshelper.ToastsHelper;
 
 import java.util.List;
 
@@ -20,12 +20,12 @@ public class QuestionsListController implements QuestionsListViewMvcImpl.Listene
     // fields that will be injected via constructor injection are marked final
     private final FetchQuestionListUseCase useCase;
     private final ScreensNavigator screensNavigator;
-    private final MessagesDisplayer messagesDisplayer;
+    private final ToastsHelper toastsHelper;
 
-    public QuestionsListController(FetchQuestionListUseCase useCase, ScreensNavigator screensNavigator, MessagesDisplayer messagesDisplayer) {
+    public QuestionsListController(FetchQuestionListUseCase useCase, ScreensNavigator screensNavigator, ToastsHelper toastsHelper) {
         this.useCase = useCase;
         this.screensNavigator = screensNavigator;
-        this.messagesDisplayer = messagesDisplayer;
+        this.toastsHelper = toastsHelper;
     }
 
     public void bindView(QuestionsListViewMvc viewMvc) {
@@ -61,6 +61,6 @@ public class QuestionsListController implements QuestionsListViewMvcImpl.Listene
     @Override
     public void onFetchQuestionListFailed() {
         viewMvc.hideProgressBar();
-        messagesDisplayer.showUseCaseError();
+        toastsHelper.showUseCaseError();
     }
 }
