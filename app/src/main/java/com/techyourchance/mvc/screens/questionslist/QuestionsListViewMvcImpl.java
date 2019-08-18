@@ -6,6 +6,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 
 import com.techyourchance.mvc.R;
@@ -39,6 +40,13 @@ public class QuestionsListViewMvcImpl extends BaseNavDrawerViewMvc<QuestionsList
         toolbar = findViewById(R.id.include);
         toolbarViewMvc = viewMvcFactory.getToolbarViewMvc(toolbar);
         toolbarViewMvc.setTitle(getString(R.string.questions_list_screen_title));
+        toolbarViewMvc.setHamburgerVisible(true);
+        toolbarViewMvc.setHamburgerListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openDrawer();
+            }
+        });
         toolbar.addView(toolbarViewMvc.getRootView());
     }
 

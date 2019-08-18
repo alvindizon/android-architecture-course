@@ -13,11 +13,13 @@ public class ToolbarViewMvc extends BaseViewMvc {
 
     private final TextView mTxtTitle;
     private final ImageButton mBtnBack;
+    private final ImageButton mBtnHamburger;
 
     public ToolbarViewMvc(LayoutInflater inflater, ViewGroup parent) {
         setRootView(inflater.inflate(R.layout.layout_toolbar, parent, false));
         mTxtTitle = findViewById(R.id.txt_toolbar_title);
         mBtnBack = findViewById(R.id.btn_back);
+        mBtnHamburger = findViewById(R.id.btn_hamburger);
     }
 
     public void setTitle(String title) {
@@ -33,6 +35,18 @@ public class ToolbarViewMvc extends BaseViewMvc {
             mBtnBack.setVisibility(View.VISIBLE);
         } else {
             mBtnBack.setVisibility(View.GONE);
+        }
+    }
+
+    public void setHamburgerListener(ImageButton.OnClickListener listener) {
+        mBtnHamburger.setOnClickListener(listener);
+    }
+
+    public void setHamburgerVisible(boolean isVisible) {
+        if(isVisible) {
+            mBtnHamburger.setVisibility(View.VISIBLE);
+        } else {
+            mBtnHamburger.setVisibility(View.GONE);
         }
     }
 }
