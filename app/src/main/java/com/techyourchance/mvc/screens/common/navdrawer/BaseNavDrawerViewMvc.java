@@ -14,7 +14,8 @@ import android.widget.FrameLayout;
 import com.techyourchance.mvc.R;
 import com.techyourchance.mvc.screens.common.views.BaseObservableViewMvc;
 
-public abstract class BaseNavDrawerViewMvc<ListenerType> extends BaseObservableViewMvc<ListenerType> {
+public abstract class BaseNavDrawerViewMvc<ListenerType> extends BaseObservableViewMvc<ListenerType>
+        implements NavDrawerViewMvc{
 
     private final DrawerLayout mDrawerLayout;
     private final FrameLayout mFrameLayout;
@@ -45,7 +46,18 @@ public abstract class BaseNavDrawerViewMvc<ListenerType> extends BaseObservableV
         mFrameLayout.addView(view);
     }
 
-    protected void openDrawer() {
+    @Override
+    public void openDrawer() {
         mDrawerLayout.openDrawer(Gravity.START);
+    }
+
+    @Override
+    public boolean isDrawerOpen() {
+        return mDrawerLayout.isDrawerOpen(Gravity.START);
+    }
+
+    @Override
+    public void closeDrawer() {
+        mDrawerLayout.closeDrawers();
     }
 }
