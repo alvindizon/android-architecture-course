@@ -8,6 +8,8 @@ import android.support.annotation.Nullable;
 import com.techyourchance.mvc.questions.FetchQuestionDetailsUseCase;
 import com.techyourchance.mvc.questions.QuestionDetails;
 import com.techyourchance.mvc.screens.common.controllers.BaseActivity;
+import com.techyourchance.mvc.screens.common.navdrawer.DrawerItems;
+import com.techyourchance.mvc.screens.common.screensnavigator.ScreensNavigator;
 import com.techyourchance.mvc.screens.common.toastshelper.ToastsHelper;
 
 public class QuestionDetailsActivity extends BaseActivity implements FetchQuestionDetailsUseCase.Listener, QuestionDetailsViewMvc.Listener {
@@ -17,6 +19,7 @@ public class QuestionDetailsActivity extends BaseActivity implements FetchQuesti
     private QuestionDetailsViewMvc viewMvc;
     private FetchQuestionDetailsUseCase useCase;
     private ToastsHelper toastsHelper;
+    private ScreensNavigator screensNavigator;
 
     public static void start(Context context, String questionId) {
         Intent intent = new Intent(context, QuestionDetailsActivity.class);
@@ -30,6 +33,7 @@ public class QuestionDetailsActivity extends BaseActivity implements FetchQuesti
         useCase = getCompositionRoot().getFetchQuestionsDetailsUseCase();
         viewMvc = getCompositionRoot().getViewMvcFactory().getQuestionDetailsViewMvc(null);
         toastsHelper = getCompositionRoot().provideMessagesDisplayer();
+        screensNavigator = getCompositionRoot().provideScreensNavigator();
         setContentView(viewMvc.getRootView());
     }
 
@@ -66,5 +70,22 @@ public class QuestionDetailsActivity extends BaseActivity implements FetchQuesti
     @Override
     public void onUpButtonClick() {
         onBackPressed();
+    }
+
+    @Override
+    public void onDrawerItemClicked(DrawerItems item) {
+        switch (item) {
+            case QUESTIONS_LIST:
+                screensNavigator.toQuestionsListClearTop();
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(viewMvc.isDrawerOpen()) {
+            viewMvc.closeDrawer();
+        } else {
+            super.onBackPressed();
+        }
     }
 }
