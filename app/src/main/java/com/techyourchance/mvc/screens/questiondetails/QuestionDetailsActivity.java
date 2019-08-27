@@ -4,22 +4,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentTransaction;
 
-import com.techyourchance.mvc.questions.FetchQuestionDetailsUseCase;
-import com.techyourchance.mvc.questions.QuestionDetails;
+import com.techyourchance.mvc.R;
+import com.techyourchance.mvc.screens.common.controllers.BackPressedListener;
 import com.techyourchance.mvc.screens.common.controllers.BaseActivity;
-import com.techyourchance.mvc.screens.common.navdrawer.DrawerItems;
-import com.techyourchance.mvc.screens.common.screensnavigator.ScreensNavigator;
-import com.techyourchance.mvc.screens.common.toastshelper.ToastsHelper;
 
-public class QuestionDetailsActivity extends BaseActivity implements FetchQuestionDetailsUseCase.Listener, QuestionDetailsViewMvc.Listener {
+import static com.techyourchance.mvc.screens.questiondetails.QuestionDetailsFragment.EXTRA_QUESTION_ID;
 
-    public static final String EXTRA_QUESTION_ID = "EXTRA_QUESTION_ID";
+public class QuestionDetailsActivity extends BaseActivity  {
 
-    private QuestionDetailsViewMvc viewMvc;
-    private FetchQuestionDetailsUseCase useCase;
-    private ToastsHelper toastsHelper;
-    private ScreensNavigator screensNavigator;
+    private BackPressedListener backPressedListener;
 
     public static void start(Context context, String questionId) {
         Intent intent = new Intent(context, QuestionDetailsActivity.class);
@@ -30,61 +25,21 @@ public class QuestionDetailsActivity extends BaseActivity implements FetchQuesti
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        useCase = getCompositionRoot().getFetchQuestionsDetailsUseCase();
-        viewMvc = getCompositionRoot().getViewMvcFactory().getQuestionDetailsViewMvc(null);
-        toastsHelper = getCompositionRoot().provideMessagesDisplayer();
-        screensNavigator = getCompositionRoot().provideScreensNavigator();
-        setContentView(viewMvc.getRootView());
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        viewMvc.showProgressBar();
-        viewMvc.registerListener(this);
-        useCase.registerListener(this);
-        useCase.fetchQuestionDetailsAndNotify(getIntent().getStringExtra(EXTRA_QUESTION_ID));
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        viewMvc.unregisterListener(this);
-        useCase.unregisterListener(this);
-    }
-
-
-    @Override
-    public void onQuestionDetailsFetched(QuestionDetails questionDetails) {
-        viewMvc.hideProgressBar();
-        viewMvc.bindQuestionDetails(questionDetails);
-    }
-
-    @Override
-    public void onQuestionDetailsFetchFailed() {
-        viewMvc.hideProgressBar();
-        toastsHelper.showUseCaseError();
-    }
-
-
-    @Override
-    public void onUpButtonClick() {
-        onBackPressed();
-    }
-
-    @Override
-    public void onDrawerItemClicked(DrawerItems item) {
-        switch (item) {
-            case QUESTIONS_LIST:
-                screensNavigator.toQuestionsListClearTop();
+        setContentView(R.layout.layout_content_frame);
+        QuestionDetailsFragment fragment;
+        if(savedInstanceState == null) {
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            fragment = QuestionDetailsFragment.newInstance(getIntent().getStringExtra(EXTRA_QUESTION_ID));
+            ft.add(R.id.frame_content, fragment).commit();
+        } else {
+            fragment = (QuestionDetailsFragment) getSupportFragmentManager().findFragmentById(R.id.frame_content);
         }
+        backPressedListener = fragment;
     }
 
     @Override
     public void onBackPressed() {
-        if(viewMvc.isDrawerOpen()) {
-            viewMvc.closeDrawer();
-        } else {
+        if(!backPressedListener.onBackPressed()) {
             super.onBackPressed();
         }
     }
