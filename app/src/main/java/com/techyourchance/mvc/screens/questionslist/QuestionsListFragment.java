@@ -19,7 +19,7 @@ public class QuestionsListFragment extends BaseFragment implements BackPressedLi
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        QuestionsListViewMvc viewMvc = getCompositionRoot().getViewMvcFactory().getQuestionsListViewMvc(null);
+        QuestionsListViewMvc viewMvc = getCompositionRoot().getViewMvcFactory().getQuestionsListViewMvc(container);
         controller = getCompositionRoot().getQuestionsListController();
         controller.bindView(viewMvc);
         return viewMvc.getRootView();

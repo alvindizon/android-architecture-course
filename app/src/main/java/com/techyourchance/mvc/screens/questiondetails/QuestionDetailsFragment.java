@@ -38,7 +38,7 @@ public class QuestionDetailsFragment extends BaseFragment implements
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         useCase = getCompositionRoot().getFetchQuestionsDetailsUseCase();
-        viewMvc = getCompositionRoot().getViewMvcFactory().getQuestionDetailsViewMvc(null);
+        viewMvc = getCompositionRoot().getViewMvcFactory().getQuestionDetailsViewMvc(container);
         toastsHelper = getCompositionRoot().provideMessagesDisplayer();
         screensNavigator = getCompositionRoot().provideScreensNavigator();
         return viewMvc.getRootView();
