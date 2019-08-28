@@ -74,7 +74,7 @@ public class QuestionDetailsFragment extends BaseFragment implements
 
     @Override
     public void onUpButtonClick() {
-        onBackPressed();
+        screensNavigator.toQuestionsListClearTop();
     }
 
     @Override
