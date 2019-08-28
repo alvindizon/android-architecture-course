@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 
 import com.techyourchance.mvc.questions.FetchQuestionDetailsUseCase;
 import com.techyourchance.mvc.questions.QuestionDetails;
+import com.techyourchance.mvc.screens.common.controllers.BackPressDispatcher;
 import com.techyourchance.mvc.screens.common.controllers.BackPressedListener;
 import com.techyourchance.mvc.screens.common.controllers.BaseFragment;
 import com.techyourchance.mvc.screens.common.navdrawer.DrawerItems;
@@ -23,6 +24,7 @@ public class QuestionDetailsFragment extends BaseFragment implements
     private FetchQuestionDetailsUseCase useCase;
     private ToastsHelper toastsHelper;
     private ScreensNavigator screensNavigator;
+    private BackPressDispatcher backPressDispatcher;
 
     public static QuestionDetailsFragment newInstance(String questionId) {
         QuestionDetailsFragment fragment = new QuestionDetailsFragment();
@@ -39,8 +41,9 @@ public class QuestionDetailsFragment extends BaseFragment implements
                              @Nullable Bundle savedInstanceState) {
         useCase = getCompositionRoot().getFetchQuestionsDetailsUseCase();
         viewMvc = getCompositionRoot().getViewMvcFactory().getQuestionDetailsViewMvc(container);
-        toastsHelper = getCompositionRoot().provideMessagesDisplayer();
+        toastsHelper = getCompositionRoot().provideToastsHelper();
         screensNavigator = getCompositionRoot().provideScreensNavigator();
+        backPressDispatcher = getCompositionRoot().provideBackPresDispatcher();
         return viewMvc.getRootView();
     }
 
@@ -50,6 +53,7 @@ public class QuestionDetailsFragment extends BaseFragment implements
         viewMvc.showProgressBar();
         viewMvc.registerListener(this);
         useCase.registerListener(this);
+        backPressDispatcher.registerListener(this);
         useCase.fetchQuestionDetailsAndNotify(getArguments().getString(EXTRA_QUESTION_ID));
     }
 
@@ -58,6 +62,7 @@ public class QuestionDetailsFragment extends BaseFragment implements
         super.onStop();
         viewMvc.unregisterListener(this);
         useCase.unregisterListener(this);
+        backPressDispatcher.unregisterListener(this);
     }
 
     @Override
@@ -74,14 +79,14 @@ public class QuestionDetailsFragment extends BaseFragment implements
 
     @Override
     public void onUpButtonClick() {
-        screensNavigator.toQuestionsListClearTop();
+        screensNavigator.toQuestionsList();
     }
 
     @Override
     public void onDrawerItemClicked(DrawerItems item) {
         switch (item) {
             case QUESTIONS_LIST:
-                screensNavigator.toQuestionsListClearTop();
+                screensNavigator.toQuestionsList();
         }
     }
 

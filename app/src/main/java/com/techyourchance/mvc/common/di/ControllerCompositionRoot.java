@@ -1,15 +1,18 @@
 package com.techyourchance.mvc.common.di;
 
-import android.app.Activity;
 import android.content.Context;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 
 import com.techyourchance.mvc.networking.StackoverflowApi;
 import com.techyourchance.mvc.questions.FetchQuestionDetailsUseCase;
 import com.techyourchance.mvc.questions.FetchQuestionListUseCase;
-import com.techyourchance.mvc.screens.common.toastshelper.ToastsHelper;
-import com.techyourchance.mvc.screens.common.screensnavigator.ScreensNavigator;
 import com.techyourchance.mvc.screens.common.ViewMvcFactory;
+import com.techyourchance.mvc.screens.common.controllers.BackPressDispatcher;
+import com.techyourchance.mvc.screens.common.controllers.FragmentFrameWrapper;
+import com.techyourchance.mvc.screens.common.screensnavigator.ScreensNavigator;
+import com.techyourchance.mvc.screens.common.toastshelper.ToastsHelper;
 import com.techyourchance.mvc.screens.questionslist.QuestionsListController;
 
 /**
@@ -19,15 +22,23 @@ import com.techyourchance.mvc.screens.questionslist.QuestionsListController;
 public class ControllerCompositionRoot {
 
     private final CompositionRoot compositionRoot;
-    private Activity activity;
+    private FragmentActivity activity;
 
-    public ControllerCompositionRoot(CompositionRoot compositionRoot, Activity activity) {
+    public ControllerCompositionRoot(CompositionRoot compositionRoot, FragmentActivity activity) {
         this.compositionRoot = compositionRoot;
         this.activity = activity;
     }
 
+    public FragmentActivity provideActivity() {
+        return activity;
+    }
+
     private Context provideContext() {
         return activity;
+    }
+
+    private FragmentManager provideFragmentManager() {
+        return activity.getSupportFragmentManager();
     }
 
     private StackoverflowApi provideStackOverflowApi() {
@@ -50,20 +61,28 @@ public class ControllerCompositionRoot {
         return new ViewMvcFactory(provideLayoutInflater());
     }
 
-    public ToastsHelper provideMessagesDisplayer() {
+    public ToastsHelper provideToastsHelper() {
         return new ToastsHelper(provideContext());
     }
 
     public ScreensNavigator provideScreensNavigator() {
-        return new ScreensNavigator(provideContext());
+        return new ScreensNavigator(provideFragmentManager(), provideFragmentFrameWrapper());
     }
 
     public QuestionsListController getQuestionsListController() {
         return new QuestionsListController(
                 getFetchQuestionListUseCase(),
                 provideScreensNavigator(),
-                provideMessagesDisplayer());
+                provideToastsHelper(),
+                provideBackPresDispatcher());
     }
 
 
+    public BackPressDispatcher provideBackPresDispatcher() {
+        return (BackPressDispatcher) provideActivity();
+    }
+
+    private FragmentFrameWrapper provideFragmentFrameWrapper() {
+        return (FragmentFrameWrapper) provideActivity();
+    }
 }

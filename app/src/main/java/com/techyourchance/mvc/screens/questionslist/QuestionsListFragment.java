@@ -3,16 +3,20 @@ package com.techyourchance.mvc.screens.questionslist;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.techyourchance.mvc.screens.common.controllers.BackPressedListener;
 import com.techyourchance.mvc.screens.common.controllers.BaseFragment;
 
-public class QuestionsListFragment extends BaseFragment implements BackPressedListener {
+public class QuestionsListFragment extends BaseFragment {
 
     private QuestionsListController controller;
+
+    public static Fragment newInstance() {
+        return new QuestionsListFragment();
+    }
 
     @Nullable
     @Override
@@ -36,10 +40,4 @@ public class QuestionsListFragment extends BaseFragment implements BackPressedLi
         super.onStop();
         controller.onStop();
     }
-
-    @Override
-    public boolean onBackPressed() {
-        return controller.onBackPressed();
-    }
-
 }
