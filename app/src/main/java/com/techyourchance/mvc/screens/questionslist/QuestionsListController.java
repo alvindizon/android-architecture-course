@@ -15,7 +15,7 @@ import java.util.List;
  *
  * Activities will delegate lifecycle events to this object.
  */
-public class QuestionsListController implements QuestionsListViewMvcImpl.Listener,
+public class QuestionsListController implements QuestionsListViewMvc.Listener,
         FetchQuestionListUseCase.Listener, BackPressedListener {
 
     private QuestionsListViewMvc viewMvc;
