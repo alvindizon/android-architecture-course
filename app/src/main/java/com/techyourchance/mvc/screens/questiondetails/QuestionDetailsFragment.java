@@ -17,14 +17,13 @@ import com.techyourchance.mvc.screens.common.screensnavigator.ScreensNavigator;
 import com.techyourchance.mvc.screens.common.toastshelper.ToastsHelper;
 
 public class QuestionDetailsFragment extends BaseFragment implements
-        FetchQuestionDetailsUseCase.Listener, QuestionDetailsViewMvc.Listener, BackPressedListener {
+        FetchQuestionDetailsUseCase.Listener, QuestionDetailsViewMvc.Listener {
 
     public static final String EXTRA_QUESTION_ID = "EXTRA_QUESTION_ID";
     private QuestionDetailsViewMvc viewMvc;
     private FetchQuestionDetailsUseCase useCase;
     private ToastsHelper toastsHelper;
     private ScreensNavigator screensNavigator;
-    private BackPressDispatcher backPressDispatcher;
 
     public static QuestionDetailsFragment newInstance(String questionId) {
         QuestionDetailsFragment fragment = new QuestionDetailsFragment();
@@ -43,7 +42,6 @@ public class QuestionDetailsFragment extends BaseFragment implements
         viewMvc = getCompositionRoot().getViewMvcFactory().getQuestionDetailsViewMvc(container);
         toastsHelper = getCompositionRoot().provideToastsHelper();
         screensNavigator = getCompositionRoot().provideScreensNavigator();
-        backPressDispatcher = getCompositionRoot().provideBackPresDispatcher();
         return viewMvc.getRootView();
     }
 
@@ -53,7 +51,6 @@ public class QuestionDetailsFragment extends BaseFragment implements
         viewMvc.showProgressBar();
         viewMvc.registerListener(this);
         useCase.registerListener(this);
-        backPressDispatcher.registerListener(this);
         useCase.fetchQuestionDetailsAndNotify(getArguments().getString(EXTRA_QUESTION_ID));
     }
 
@@ -62,7 +59,6 @@ public class QuestionDetailsFragment extends BaseFragment implements
         super.onStop();
         viewMvc.unregisterListener(this);
         useCase.unregisterListener(this);
-        backPressDispatcher.unregisterListener(this);
     }
 
     @Override
@@ -80,22 +76,5 @@ public class QuestionDetailsFragment extends BaseFragment implements
     @Override
     public void onUpButtonClick() {
         screensNavigator.navigateUp();
-    }
-
-    @Override
-    public void onDrawerItemClicked(DrawerItems item) {
-        switch (item) {
-            case QUESTIONS_LIST:
-                screensNavigator.toQuestionsList();
-        }
-    }
-
-    @Override
-    public boolean onBackPressed() {
-        if(viewMvc.isDrawerOpen()) {
-            viewMvc.closeDrawer();
-            return true;
-        }
-        return false;
     }
 }

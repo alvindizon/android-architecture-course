@@ -12,12 +12,10 @@ import android.widget.TextView;
 import com.techyourchance.mvc.R;
 import com.techyourchance.mvc.questions.QuestionDetails;
 import com.techyourchance.mvc.screens.common.ViewMvcFactory;
-import com.techyourchance.mvc.screens.common.navdrawer.BaseNavDrawerViewMvc;
-import com.techyourchance.mvc.screens.common.navdrawer.DrawerItems;
 import com.techyourchance.mvc.screens.common.toolbar.ToolbarViewMvc;
 import com.techyourchance.mvc.screens.common.views.BaseObservableViewMvc;
 
-public class QuestionDetailsViewMvcImpl extends BaseNavDrawerViewMvc<QuestionDetailsViewMvc.Listener> implements QuestionDetailsViewMvc {
+public class QuestionDetailsViewMvcImpl extends BaseObservableViewMvc<QuestionDetailsViewMvc.Listener> implements QuestionDetailsViewMvc {
     private static final String TAG = QuestionDetailsViewMvcImpl.class.getSimpleName();
 
     private TextView questionTitle;
@@ -29,8 +27,6 @@ public class QuestionDetailsViewMvcImpl extends BaseNavDrawerViewMvc<QuestionDet
     private ToolbarViewMvc toolbarViewMvc;
 
     public QuestionDetailsViewMvcImpl(LayoutInflater layoutInflater, ViewGroup viewGroup, ViewMvcFactory viewMvcFactory) {
-        super(layoutInflater, viewGroup);
-
         setRootView(layoutInflater.inflate(R.layout.questions_details, viewGroup, false));
         questionTitle = findViewById(R.id.title);
         questionBody = findViewById(R.id.body);
@@ -68,10 +64,4 @@ public class QuestionDetailsViewMvcImpl extends BaseNavDrawerViewMvc<QuestionDet
         progressBar.setVisibility(View.GONE);
     }
 
-    @Override
-    protected void onDrawerItemClicked(DrawerItems item) {
-        for (Listener listener : getListeners()) {
-            listener.onDrawerItemClicked(item);
-        }
-    }
 }
